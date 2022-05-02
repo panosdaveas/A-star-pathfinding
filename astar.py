@@ -21,7 +21,7 @@ cols = 40
 width = WIDTH // cols
 height = HEIGHT // rows
 SCREEN = pygame.display.set_mode((windowX, windowY))
-pygame.display.set_caption('A* Pathfinding Algorithm')
+pygame.display.set_caption('A Pathfinding Algorithm')
 # a* variables
 grid = []
 openSet = []
