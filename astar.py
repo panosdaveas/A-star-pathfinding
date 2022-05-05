@@ -11,7 +11,7 @@ CLOSED_SET = (230, 230, 250)
 OPEN_SET = (188, 245, 188)
 HIGHLIGHT = (186, 85, 211)
 # pygame settings
-FPS = 20
+FPS = 10
 windowX = 800
 windowY = 600
 WIDTH = 600
@@ -29,7 +29,7 @@ closedSet = []
 path = []
 costs = [0.5, 1]
 wall_probability = 0.2
-num_of_targets = 4
+num_of_targets = 8
 
 
 def heuristic(a, b):
@@ -201,6 +201,10 @@ def next_target(startTarget, targets):
             if heuristic(startTarget, target) < min_dist:
                 min_dist = heuristic(startTarget, target)
                 nextTarget = target
+    # for n in closedSet:
+    #     if n not in path and n not in targets and n not in \
+    #             openSet and not n.isWall:
+    #         closedSet.remove(n)
     return nextTarget, exists_next_target
 
 
@@ -371,6 +375,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                # pygame.image.save(SCREEN, "screenshot1.jpg")
                 pygame.display.quit()
                 pygame.quit()
                 quit()
@@ -388,6 +393,7 @@ def main():
                     else:
                         count += 1
                         label = 'PAUSE'
+                        # pygame.image.save(SCREEN, "screenshot.jpg")
                         start = True
 
         if start:
