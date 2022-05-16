@@ -11,7 +11,7 @@ CLOSED_SET = (230, 230, 250)
 OPEN_SET = (188, 245, 188)
 HIGHLIGHT = (186, 85, 211)
 # pygame settings
-FPS = 10
+FPS = 15
 windowX = 800
 windowY = 600
 WIDTH = 600
@@ -34,6 +34,10 @@ num_of_targets = 4
 
 def heuristic(a, b):
     #L1 distance since we don't have diagonal moves
+    #cost for horizontal moves is 0.5 and
+    #the cost for vertical move is 1
+    #Here, we calculate the cost of the optimal path
+    #without walls
     dist = 0
     distX = abs(a.i - b.i)
     distY = abs(a.j - b.j)
@@ -45,6 +49,7 @@ def heuristic(a, b):
 
 
 def a_star(targetNode):
+    #The a* implementation
     solution = True
     solved = False
     if len(openSet) > 0:
@@ -62,6 +67,7 @@ def a_star(targetNode):
         current = openSet[winner]
 
         if current is targetNode:
+            # break if target is found
             solved = True
             path.insert(0, targetNode)
             return solved, solution
@@ -88,6 +94,8 @@ def a_star(targetNode):
 
     # find the path
     if solution:
+        # retrieve the nodes that
+        # belong to the path
         path.clear()
         temp = current
         path.append(temp)
@@ -99,6 +107,7 @@ def a_star(targetNode):
 
 
 class Cell:
+    # Cell class
 
     def __init__(self, i, j):
         self.i = i
@@ -141,6 +150,7 @@ class Cell:
 
 
 def update_cost(cell):
+    # assign correct cost to each neighbour
     neighbours = cell.neighbours
     for neighbour in neighbours:
         if neighbour not in closedSet:
@@ -151,6 +161,7 @@ def update_cost(cell):
 
 
 def calculate_cost():
+    # calculate the cost of the path
     cost = 0
     for cell in reversed(path):
         cost += cell.cost
@@ -158,6 +169,7 @@ def calculate_cost():
 
 
 def generate_targets():
+    # create random targets
     targets = []
     for i in range(num_of_targets):
         targets.append(
@@ -166,6 +178,7 @@ def generate_targets():
 
 
 def setup():
+    # initialize the game
     for i in range(cols):
         grid.append([])
 
@@ -191,6 +204,7 @@ def setup():
 
 
 def next_target(startTarget, targets):
+    # move to the next target with the least cost
     exists_next_target = False
     startTarget.isTraversed = True
     min_dist = heuristic(grid[0][0], grid[cols - 1][rows - 1])
@@ -205,6 +219,7 @@ def next_target(startTarget, targets):
 
 
 def draw_grid():
+    # draw pygame grid
     for i in range(cols + 1):
         pygame.draw.line(SCREEN, WALL, (0, i * width), (WIDTH, i * width))
         for j in range(rows + 1):
@@ -213,6 +228,7 @@ def draw_grid():
 
 
 def draw_menu(score, nodes, solution, expansions):
+    #draw pygame features
     border_radius = 2
     gap = 10
     font_size = 2 * gap
@@ -284,6 +300,7 @@ def draw_menu(score, nodes, solution, expansions):
 
 
 def draw_buttons(label):
+    # draw pygame menu
     gap = 10
     font_size = 2 * gap
     x1 = WIDTH + gap
@@ -309,6 +326,7 @@ def draw_buttons(label):
 
 
 def draw(nodes):
+    # assign colors to cells
     SCREEN.fill(FILL)
     for row in grid:
         for cell in row:
@@ -334,6 +352,7 @@ def draw(nodes):
 
 
 def is_over(rect, pos):
+    # check if mouse is in a button area
     return True if rect.collidepoint(pos[0], pos[1]) else False
 
 
@@ -370,8 +389,9 @@ def main():
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # game controls
                 run = False
-                # pygame.image.save(SCREEN, "screenshot1.jpg")
+                # pygame.image.save(SCREEN, "screenshot_2.jpg")
                 pygame.display.quit()
                 pygame.quit()
                 quit()
@@ -389,7 +409,7 @@ def main():
                     else:
                         count += 1
                         label = 'PAUSE'
-                        # pygame.image.save(SCREEN, "screenshot.jpg")
+                        # pygame.image.save(SCREEN, "screenshot_1.jpg")
                         start = True
 
         if start:
